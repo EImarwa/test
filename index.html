@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Daily Planner Sign-Up</title>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; max-width: 600px; margin: auto; }
+        h1 { text-align: center; }
+        .day { margin-bottom: 30px; padding: 15px; border: 1px solid #ccc; border-radius: 8px; }
+        .activity { margin: 10px 0; padding: 10px; border: 1px solid #ddd; border-radius: 6px; background: #f9f9f9; }
+        .participants { margin-top: 5px; }
+        input[type="text"] { width: 40%; padding: 5px; margin-right: 5px; }
+        button { padding: 5px 10px; }
+        .activity-title { font-weight: bold; }
+    </style>
+</head>
+<body>
+
+<h1>Monthly Daily Planner</h1>
+<div id="planner"></div>
+
+<script>
+const plannerData = [
+    {
+        date: "June 18, 2025",
+        activities: [
+            { title: "Gaming Session", time: "10:00 - 12:00", participants: [] },
+            { title: "Movie Watching", time: "14:00 - 16:00", participants: [] },
+            { title: "Out for Walk", time: "19:00 - 21:00", participants: [] }
+        ]
+    },
+    {
+        date: "June 19, 2025",
+        activities: [
+            { title: "Board Games", time: "11:00 - 13:00", participants: [] },
+            { title: "Sleeping Time", time: "15:00 - 17:00", participants: [] }
+        ]
+    }
+];
+
+function renderPlanner() {
+    const planner = document.getElementById('planner');
+    planner.innerHTML = '';
+    
+    plannerData.forEach(day => {
+        const dayDiv = document.createElement('div');
+        dayDiv.className = 'day';
+
+        const dateHeader = document.createElement('h2');
+        dateHeader.textContent = day.date;
+        dayDiv.appendChild(dateHeader);
+
+        day.activities.forEach(activity => {
+            const activityDiv = document.createElement('div');
+            activityDiv.className = 'activity';
+
+            const title = document.createElement('div');
+            title.className = 'activity-title';
+            title.textContent = `${activity.title} | ${activity.time}`;
+            activityDiv.appendChild(title);
+
+            const participantsDiv = document.createElement('div');
+            participantsDiv.className = 'participants';
+            participantsDiv.innerHTML = `<strong>Participants:</strong> ${activity.participants.map(p => `${p.name} (${p.contact})`).join(', ') || 'None yet'}`;
+            activityDiv.appendChild(participantsDiv);
+
+            const nameInput = document.createElement('input');
+            nameInput.placeholder = 'Your Name';
+            
+            const contactInput = document.createElement('input');
+            contactInput.placeholder = 'Contact Info';
+
+            const joinBtn = document.createElement('button');
+            joinBtn.textContent = 'Join';
+            joinBtn.onclick = () => {
+                if (nameInput.value && contactInput.value) {
+                    activity.participants.push({ name: nameInput.value, contact: contactInput.value });
+                    renderPlanner();
+                } else {
+                    alert('Please enter your name and contact.');
+                }
+            };
+
+            activityDiv.appendChild(nameInput);
+            activityDiv.appendChild(contactInput);
+            activityDiv.appendChild(joinBtn);
+
+            dayDiv.appendChild(activityDiv);
+        });
+
+        planner.appendChild(dayDiv);
+    });
+}
+
+renderPlanner();
+</script>
+
+</body>
+</html>
